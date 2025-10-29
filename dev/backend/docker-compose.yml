@@ -1,0 +1,46 @@
+volumes:
+  redis_data:
+  sql_data:
+services:
+  orderservice.api:
+    image: localhost:8083/devbackend:1.0.0
+    container_name: orderingapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - "sqlConnection=server=orderdb;User Id=sa;Password=M@jid9050;Encrypt=True;TrustServerCertificate=True;"
+      - "RedisDb=catchdb:6379,password=majid9050"
+    ports:
+      - "5001:8080"
+    depends_on:
+      - redisdb
+      - sqlserverdb
+    labels:
+      - "traefik.http.routers.backend-dev.rule=Host(`dev.zar.com`)"
+      # - "traefik.http.services.front.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.backend-auth.basicauth.users=majid:$1$0l.Cm/..$3dxxhtDUd8vdEfjNE7EJ31"
+      - "traefik.http.routers.backend-dev.middlewares=backend-auth"
+
+  redisdb:
+    image: redis
+    container_name: catchdb
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --requirepass majid9050
+    volumes:
+      - redis_data:/data
+  sqlserverdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: orderdb
+    restart: unless-stopped
+    environment:
+      SA_PASSWORD: "M@jid9050"
+      ACCEPT_EULA: "Y"
+
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
