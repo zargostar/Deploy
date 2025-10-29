@@ -1,3 +1,6 @@
+networks:
+  web:
+    external: true
 volumes:
   redis_data:
   sql_data:
@@ -15,6 +18,8 @@ services:
     depends_on:
       - redisdb
       - sqlserverdb
+    networks:
+      - web
     labels:
       - "traefik.http.routers.backend-dev.rule=Host(`dev.api.zar.com`)"
       # - "traefik.http.services.front.loadbalancer.server.port=80"
@@ -24,6 +29,8 @@ services:
   redisdb:
     image: redis
     container_name: catchdb
+    networks:
+      - web
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -35,6 +42,8 @@ services:
   sqlserverdb:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: orderdb
+    networks:
+      - web
     restart: unless-stopped
     environment:
       SA_PASSWORD: "M@jid9050"
