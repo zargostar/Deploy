@@ -16,7 +16,7 @@ services:
       - redisdb
       - sqlserverdb
     labels:
-      - "traefik.http.routers.backend-dev.rule=Host(`dev.zar.com`)"
+      - "traefik.http.routers.backend-dev.rule=Host(`dev.api.zar.com`)"
       # - "traefik.http.services.front.loadbalancer.server.port=80"
       - "traefik.http.middlewares.backend-auth.basicauth.users=majid:$1$0l.Cm/..$3dxxhtDUd8vdEfjNE7EJ31"
       - "traefik.http.routers.backend-dev.middlewares=backend-auth"
