@@ -1,0 +1,10 @@
+networks:
+  web:
+volumes:
+  gita-data:
+  postGr-data:
+services:
+  image: gitea/gitea:latest
+  container_name: gita
+  ports:
+    - "3030:3000"
