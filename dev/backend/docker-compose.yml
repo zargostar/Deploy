@@ -8,6 +8,7 @@ services:
   orderservice.api:
     image: localhost:8083/devbackend:1.0.0
     container_name: orderingapi
+    restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
